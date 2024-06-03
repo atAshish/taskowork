@@ -63,11 +63,29 @@ const Employee = sequelize.define("employee", {
     allowNull: false,
     unique: true,
   },
+  EmployeeDepartment: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  Location: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  Branch: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+
+  ReportsTo: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+
   Password: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  Role: {
+  Designation: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -104,12 +122,22 @@ async function createClientTable(CompanyName, CompanyID) {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    Frequency: {
-      type: DataTypes.ENUM("daily", "weekly", "monthly"),
+    TaskAssignedDate: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
+    TaskCompletedDate: {
+      // New field for TaskCompletedDate
+      type: DataTypes.DATE,
+      allowNull: true, // Allows NULL values by default
+    },
+    TaskPriority: {
+      type: DataTypes.ENUM("High", "Medium", "Low"),
+      allowNull: false,
+      defaultValue: false,
+    },
     TaskStatus: {
-      type: DataTypes.ENUM("active", "completed", "pending"),
+      type: DataTypes.ENUM("Active", "WIP", "Review", "Resolved"),
       allowNull: false,
       defaultValue: false,
     },
@@ -118,6 +146,12 @@ async function createClientTable(CompanyName, CompanyID) {
   // Sync the new model with the database
   await Task.sync();
   return Task;
+}
+async function createDepartmentTable(CompanyName, CompanyID) {
+  const Department = sequelize.define(
+    `${CompanyName}_${CompanyID}_DepartmentTable`,
+    {}
+  );
 }
 
 module.exports = {
